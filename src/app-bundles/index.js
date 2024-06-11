@@ -63,7 +63,7 @@ export default composeBundles(
   createAuthBundle({
     name: 'auth',
     host: process.env.REACT_APP_AUTH_HOST,
-    realm: 'water',
+    realm: 'cwbi',
     client: 'cumulus',
     redirectUrl: process.env.REACT_APP_AUTH_REDIRECT_URL,
     refreshInterval: 120,
@@ -85,8 +85,8 @@ export default composeBundles(
         if (method === 'GET') {
           const urlObj = new URL(url);
           const token_routes = {
-            '/my_downloads': true,
-            '/downloads': true,
+            '/api/my_downloads': true,
+            '/api/downloads': true,
           };
           if (urlObj.pathname && token_routes[urlObj.pathname]) {
             return false;
