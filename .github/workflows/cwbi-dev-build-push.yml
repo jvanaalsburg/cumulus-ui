@@ -25,6 +25,7 @@ jobs:
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -35,11 +36,11 @@ jobs:
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          mask-password: 'true'
+      #   - name: Login to Amazon ECR
+      #     id: login-ecr
+      #     uses: aws-actions/amazon-ecr-login@v2
+      #     with:
+      #       mask-password: 'true'
       - name: Build Image; Push to S3
         env:
           S3_BUCKET: cumulus-dev
