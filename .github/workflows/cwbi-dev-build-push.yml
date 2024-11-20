@@ -26,6 +26,20 @@ jobs:
       - name: Git clone the repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js (React app requires Node.js)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Use the appropriate version of Node.js for your project
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Build the React app for production
+      - name: Build React App
+        run: npm run build
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -41,7 +55,8 @@ jobs:
       #     uses: aws-actions/amazon-ecr-login@v2
       #     with:
       #       mask-password: 'true'
-      - name: Build Image; Push to S3
+
+      - name: Deploy to S3
         env:
           S3_BUCKET: cumulus-dev
         run: npm run deploy-develop
