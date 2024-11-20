@@ -1,0 +1,46 @@
+#This is a basic workflow to help you get started with Actions
+name: Build UI, Push to AWS Dev S3
+
+# Controls when the action will run. Invokes the workflow on push events but only for the main branch
+on:
+  push:
+    branches: [cwbi-dev]
+
+env:
+  AWS_REGION: aws-us-gov #Change to reflect your Region
+
+# Permission can be added at job level or workflow level
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+jobs:
+  Build-Push-UI-to-Dev:
+    env:
+      REACT_APP_AUTH_HOST: https://identityc-test.cwbi.us/auth
+      REACT_APP_AUTH_REDIRECT_URL: https://cumulus.dev.cwbi.us
+      REACT_APP_CUMULUS_API_URL: https://cumulus.dev.cwbi.us/api
+      # REACT_APP_SHARED_API_URL: https://develop-shared-api.corps.cloud
+      REACT_APP_ISDEVELOPMENT: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-gov-west-1
+          role-to-assume: arn:aws-us-gov:iam::718787032875:role/github-actions-s3-cumulus
+          output-credentials: true
+      # Hello from AWS: WhoAmI
+      - name: Sts GetCallerIdentity
+        run: |
+          aws sts get-caller-identity
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: 'true'
+      - name: Build Image; Push to S3
+        env:
+          S3_BUCKET: cumulus-dev
+        run: npm run deploy-develop
