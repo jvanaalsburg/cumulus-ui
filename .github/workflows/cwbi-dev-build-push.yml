@@ -5,6 +5,8 @@ name: Build UI, Push to AWS Dev S3
 on:
   push:
     branches: [cwbi-dev]
+  # Allow the workflow to be triggered manually from the GitHub UI
+  workflow_dispatch:
 
 env:
   AWS_REGION: aws-us-gov #Change to reflect your Region
