@@ -20,8 +20,7 @@ jobs:
     env:
       REACT_APP_AUTH_HOST: https://identityc-test.cwbi.us/auth
       REACT_APP_AUTH_REDIRECT_URL: https://cumulus.dev.cwbi.us
-      # REACT_APP_CUMULUS_API_URL: https://cumulus.dev.cwbi.us/api
-      REACT_APP_CUMULUS_API_URL: ${{ vars.CWBI_DEV_API_ENDPOINT }}
+      REACT_APP_CUMULUS_API_URL: https://cumulus.dev.cwbi.us/api
       # REACT_APP_SHARED_API_URL: https://develop-shared-api.corps.cloud
       REACT_APP_ISDEVELOPMENT: true
     runs-on: ubuntu-latest
