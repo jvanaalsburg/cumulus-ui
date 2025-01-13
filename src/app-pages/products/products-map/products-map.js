@@ -1,6 +1,6 @@
 import { connect } from 'redux-bundler-react';
 
-export default connect(function Map() {
+export default connect(function ProductsMap() {
   return (
     <div className='shadow bg-slate-100 h-full ml-5 mr-5 overflow-hidden border-b border-t border-gray-200 sm:rounded-lg'>
       <div className='max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8'>

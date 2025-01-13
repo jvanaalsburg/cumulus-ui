@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { connect } from 'redux-bundler-react';
 import DateRangeSlider from './date-range-slider';
 import ProductsTable from './products-table/products-table';
-import ProductsMap from './products-map/map';
+import ProductsMap from './products-map/products-map';
 import ButtonGroup from '../../app-components/button-group/button-group';
 import ButtonGroupButton from '../../app-components/button-group/button-group-button';
 import FilterPanel from './filter-panel';
