@@ -9,3 +9,8 @@
 .thumb-pointer-events-auto::-webkit-slider-thumb {
   pointer-events: auto;
 }
+
+.leaflet-container {
+  width: 100%;
+  min-height: 400px;
+}
