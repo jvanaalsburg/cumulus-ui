@@ -9,6 +9,9 @@ import getStore from './app-bundles';
 import App from './App';
 import cache from './cache';
 
+import 'leaflet-easybutton/src/easy-button.js';
+import 'leaflet-easybutton/src/easy-button.css';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 cache.getAll().then((initialData) => {
