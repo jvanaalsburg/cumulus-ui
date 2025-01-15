@@ -1,13 +1,48 @@
 import { useState } from 'react';
 import { connect } from 'redux-bundler-react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ProductsMapContainer from './products-map-container';
+
+const MAP_SEARCH_URL = process.env.REACT_APP_MAP_SEARCH_URL;
+
+function SearchButton({ onClick, isDisabled }) {
+  return (
+    <button
+      className={
+        'inline-flex items-center text-base font-medium rounded text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 ' +
+        (isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer')
+      }
+      onClick={onClick}
+      disabled={isDisabled}
+    >
+      <MagnifyingGlassIcon className='w-4 h-4 mr-2' /> Search Region
+    </button>
+  );
+}
 
 export default connect(function ProductsMap() {
   const [region, setRegion] = useState(null);
+  const [results, setResults] = useState(null);
+
+  const submitSearch = () => {
+    fetch(MAP_SEARCH_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(region),
+    })
+      .then((response) => response.json())
+      .then(setResults);
+  };
 
   return (
     <div className='shadow bg-slate-100 h-full ml-5 mr-5 overflow-hidden border-b border-t border-gray-200 sm:rounded-lg'>
       <ProductsMapContainer onRegionUpdate={setRegion} />
+
+      <div className='flex justify-end mt-2 mb-2 mr-2'>
+        <SearchButton onClick={submitSearch} isDisabled={!region} />
+      </div>
     </div>
   );
 });
