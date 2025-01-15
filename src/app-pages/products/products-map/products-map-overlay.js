@@ -63,6 +63,7 @@ export default function ProductsMapOverlay(props) {
   const onDelete = () => {
     draw.current.clear();
     draw.current.setMode('rectangle');
+    props.onRegionUpdate(null);
   };
 
   return null;
