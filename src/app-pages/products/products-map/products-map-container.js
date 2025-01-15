@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer } from 'react-leaflet';
 import ProductsMapOverlay from './products-map-overlay';
 
-export default function ProductsMapContainer() {
+export default function ProductsMapContainer(props) {
   return (
     <div className='map-container'>
       <MapContainer center={[37.1, -95.7]} zoom={4} scrollWheelZoom={false}>
@@ -10,7 +10,7 @@ export default function ProductsMapContainer() {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        <ProductsMapOverlay />
+        <ProductsMapOverlay onRegionUpdate={props.onRegionUpdate} />
       </MapContainer>
     </div>
   );
