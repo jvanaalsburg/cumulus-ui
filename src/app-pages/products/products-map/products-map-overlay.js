@@ -4,6 +4,7 @@ import * as Leaflet from 'leaflet';
 import {
   TerraDraw,
   TerraDrawRectangleMode,
+  TerraDrawRenderMode,
   TerraDrawSelectMode,
 } from 'terra-draw';
 import { TerraDrawLeafletAdapter } from 'terra-draw-leaflet-adapter';
@@ -30,6 +31,9 @@ export default function ProductsMapOverlay(props) {
         map,
       }),
       modes: [
+        new TerraDrawRenderMode({
+          modeName: 'render',
+        }),
         new TerraDrawRectangleMode(),
         new TerraDrawSelectMode({
           flags: {
@@ -92,6 +96,8 @@ export default function ProductsMapOverlay(props) {
     group.addTo(map);
 
     layerGroup.current = group;
+
+    draw.current.setMode('render');
   };
 
   return (
