@@ -7,7 +7,7 @@ import { mergeRefs } from '../../../utils';
 // width to height ratio to make our cells square
 const ratio = 640 / 112;
 
-export default function WaterYearHeatMap({ year = 2022, data }) {
+export default function WaterYearHeatMap({ year = 2022, data, onclick }) {
   const ticks = useMemo(() => {
     const waterYearStart = new Date(`10-01-${year - 1}`);
     const waterYearEnd = new Date(`10-01-${year}`);
@@ -65,6 +65,16 @@ export default function WaterYearHeatMap({ year = 2022, data }) {
               date: true,
               files: true,
             },
+          },
+          render(index, scales, values, dimensions, context, next) {
+            const g = next(index, scales, values, dimensions, context);
+            for (let i = 0; i < index.length; i++) {
+              g.childNodes[i].onclick = () => {
+                let date = values.channels.date.value[i];
+                onclick(date);
+              };
+            }
+            return g;
           },
         }),
         // Possibly turn this on via config?

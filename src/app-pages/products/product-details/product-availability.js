@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { connect } from 'redux-bundler-react';
 import HeatMap from './water-year-heatmap';
 import ButtonGroup from '../../../app-components/button-group/button-group';
 import ButtonGroupButton from '../../../app-components/button-group/button-group-button';
+import AvailabilityModal from '../../../app-components/modals/availability-modal.js';
 
 export default connect(
   'selectProductavailabilityByWaterYearByRoute',
   ({ productavailabilityByWaterYearByRoute: productAvailability }) => {
     const [sortDesc, setSortDesc] = useState(true);
+
+    const handleHeatMapClick = useCallback(
+      (date) => {
+        doModalOpen(AvailabilityModal, { date: date });
+      },
+      [doModalOpen],
+    );
+
     return (
       <div>
         <div className='flex justify-between'>
@@ -58,6 +67,7 @@ export default connect(
                     width={'100%'}
                     year={year}
                     data={Object.values(productAvailability[year])}
+                    onclick={handleHeatMapClick}
                   />
                 );
               })}
