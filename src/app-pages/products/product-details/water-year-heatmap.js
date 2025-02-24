@@ -52,11 +52,20 @@ export default function WaterYearHeatMap({ year = 2022, data }) {
           x: (d) => d.x,
           y: (d) => d.y,
           fill: (d) => (d.count ? d.count : -1),
-          title: (d, i) => {
-            return `${d.date.toLocaleDateString()} - ${d.count} files`;
-          },
-          text: (d) => d.count,
           inset: 0.6,
+          channels: {
+            date: (d) => d.date.toLocaleDateString(),
+            files: 'count',
+          },
+          tip: {
+            format: {
+              x: false,
+              y: false,
+              fill: false,
+              date: true,
+              files: true,
+            },
+          },
         }),
         // Possibly turn this on via config?
         // Plot.text(data, {
