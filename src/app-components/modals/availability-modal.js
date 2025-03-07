@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'redux-bundler-react';
-import { format } from 'date-fns';
+import { format, addDays, subDays } from 'date-fns';
 import { UTCDate } from '@date-fns/utc';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import {
+  CheckCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  XCircleIcon,
+} from '@heroicons/react/24/solid';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const CUMULUS_API_URL = process.env.REACT_APP_CUMULUS_API_URL;
@@ -64,6 +69,7 @@ const fileList = (files) => {
 };
 
 export default connect('doModalClose', ({ doModalClose, product, date }) => {
+  const [currDate, setCurrDate] = useState(null);
   const [files, setFiles] = useState([]);
 
   // Initialize the component.
@@ -76,6 +82,9 @@ export default connect('doModalClose', ({ doModalClose, product, date }) => {
    * @date {datetime} - The date for the data request.
    */
   const fetchData = (date) => {
+    // Update the current date.
+    setCurrDate(date);
+
     // Fetch the availability data and then update the files list.
     const url = `${CUMULUS_API_URL}/products/${
       product.id
@@ -101,9 +110,38 @@ export default connect('doModalClose', ({ doModalClose, product, date }) => {
 
           {/* Display the current date. */}
           <p className='mt-1 text-sm text-gray-500'>
-            {date && <i>{format(new UTCDate(date), 'EEEE, MMMM do, yyyy')}</i>}
+            {currDate && (
+              <i>{format(new UTCDate(currDate), 'EEEE, MMMM do, yyyy')}</i>
+            )}
           </p>
         </div>
+      </div>
+    );
+  };
+
+  // Display UI for fetching the previous and next day's data.
+  const paginationControls = () => {
+    return (
+      <div className='flex justify-between border-y border-gray-200 p-2'>
+        {/* Add button for retrieving the previous day's availability. */}
+        <button
+          type='button'
+          className='inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+          onClick={() => fetchData(subDays(currDate, 1))}
+        >
+          <ChevronLeftIcon className='-ml-1 mr-3 w-5 h-5' aria-hidden='true' />
+          Prev
+        </button>
+
+        {/* Add button for retrieving the next day's availability. */}
+        <button
+          type='button'
+          className='inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+          onClick={() => fetchData(addDays(currDate, 1))}
+        >
+          Next
+          <ChevronRightIcon className='ml-2 -mr-1 w-5 h-5' aria-hidden='true' />
+        </button>
       </div>
     );
   };
@@ -127,6 +165,7 @@ export default connect('doModalClose', ({ doModalClose, product, date }) => {
   return (
     <div className='shadow rounded-md overflow-hidden'>
       {header()}
+      {paginationControls()}
       {fileList(files)}
       {footer()}
     </div>
