@@ -3,6 +3,7 @@
   "version": "1.4.4",
   "private": true,
   "dependencies": {
+    "@date-fns/utc": "^2.1.0",
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^2.0.14",
     "@observablehq/plot": "^0.6.15",
@@ -14,7 +15,7 @@
     "@usace/create-keycloak-auth-bundle": "^0.2.1",
     "@usace/create-rest-bundle": "^0.1.2",
     "d3": "^7.9.0",
-    "date-fns": "^2.28.0",
+    "date-fns": "^4.0.0",
     "internal-nav-helper": "^3.1.0",
     "money-clip": "^3.0.5",
     "react": "^18.2.0",
