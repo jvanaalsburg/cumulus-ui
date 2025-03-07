@@ -7,12 +7,17 @@ import AvailabilityModal from '../../../app-components/modals/availability-modal
 
 export default connect(
   'selectProductavailabilityByWaterYearByRoute',
-  ({ productavailabilityByWaterYearByRoute: productAvailability }) => {
+  'doModalOpen',
+  ({
+    product,
+    productavailabilityByWaterYearByRoute: productAvailability,
+    doModalOpen,
+  }) => {
     const [sortDesc, setSortDesc] = useState(true);
 
     const handleHeatMapClick = useCallback(
       (date) => {
-        doModalOpen(AvailabilityModal, { date: date });
+        doModalOpen(AvailabilityModal, { product, date });
       },
       [doModalOpen],
     );

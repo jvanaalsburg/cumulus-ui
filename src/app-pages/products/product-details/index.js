@@ -106,7 +106,7 @@ export default connect(
             </div>
             <div className='max-w-7xl mx-auto px-4 pt-6 sm:px-6 lg:px-8'>
               <div className='bg-white overflow-hidden shadow rounded-lg px-3 py-3'>
-                <ProductAvailability />
+                <ProductAvailability product={product} />
               </div>
             </div>
           </div>
