@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'redux-bundler-react';
+import { Switch } from '@headlessui/react';
 import { format, addDays, subDays } from 'date-fns';
 import { UTCDate } from '@date-fns/utc';
 import {
@@ -39,12 +40,17 @@ const fileStatus = (file) => {
  * @param {Object[]} files - A list of product files.
  * @param {string} files[].datetime - The time of the file upload.
  * @param {bool} files[].is_available - Whether or not the file has been uploaded.
+ * @param {bool} missingOnly - Flag used to only display files that have not been uploaded.
  * @returns JSX.Element
  */
-const fileList = (files) => {
+const fileList = (files, missingOnly = false) => {
+  // Generate a list of files that should be displayed. If `missingOnly` is true,
+  // or not specified, all files will be displayed.
+  const filteredFiles = files.filter((f) => !missingOnly || !f.is_available);
+
   return (
     <ul role='list' className='divide-y divide-gray-200 border-t'>
-      {files.map((file, index) => (
+      {filteredFiles.map((file, index) => (
         <li
           key={`file-item-${index}`}
           className='flex justify-between items-center px-4 py-3 hover:bg-gray-50'
@@ -71,6 +77,7 @@ const fileList = (files) => {
 export default connect('doModalClose', ({ doModalClose, product, date }) => {
   const [currDate, setCurrDate] = useState(null);
   const [files, setFiles] = useState([]);
+  const [showMissing, setShowMissing] = useState(false);
 
   // Initialize the component.
   useEffect(() => {
@@ -146,6 +153,36 @@ export default connect('doModalClose', ({ doModalClose, product, date }) => {
     );
   };
 
+  // Display a toggle button for limiting displayed results to only missing files.
+  const showMissingToggle = () => {
+    return (
+      <div className='flex justify-end px-2 py-1'>
+        <Switch.Group as='div' className='flex items-center'>
+          {/* */}
+          <Switch.Label as='span' className='mr-3'>
+            <span className='text-sm font-medium text-gray-500'>
+              Show missing only
+            </span>
+          </Switch.Label>
+
+          {/* */}
+          <Switch
+            checked={showMissing}
+            onChange={setShowMissing}
+            className={`${showMissing ? 'bg-indigo-600' : 'bg-gray-200'}
+          relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
+          >
+            <span
+              aria-hidden='true'
+              className={`${showMissing ? 'translate-x-4' : 'translate-x-0'}
+            pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+            />
+          </Switch>
+        </Switch.Group>
+      </div>
+    );
+  };
+
   // Display the modal footer.
   const footer = () => {
     return (
@@ -166,7 +203,8 @@ export default connect('doModalClose', ({ doModalClose, product, date }) => {
     <div className='shadow rounded-md overflow-hidden'>
       {header()}
       {paginationControls()}
-      {fileList(files)}
+      {showMissingToggle()}
+      {fileList(files, showMissing)}
       {footer()}
     </div>
   );
