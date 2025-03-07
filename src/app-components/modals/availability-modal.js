@@ -9,9 +9,43 @@ import {
   ChevronRightIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  CloudIcon,
+  ExclamationTriangleIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 
 const CUMULUS_API_URL = process.env.REACT_APP_CUMULUS_API_URL;
+
+/**
+ * Display the number of successful, and missing, file uploads in badge components.
+ *
+ * @param {Object[]} files - A list of product files.
+ * @param {bool} files[].is_available - Whether or not the file has been uploaded.
+ * @returns JSX.Element
+ */
+const fileBadges = (files) => {
+  // Generate a list containing the failed (or missing) files.
+  const failed = files.filter((f) => !f.is_available);
+
+  return (
+    <div className='mt-3'>
+      {/* We always display the number of successfully uploaded files. */}
+      <span className='inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-800 mr-3'>
+        <CloudIcon className='mr-2 w-5 h-5' />
+        {files.filter((f) => f.is_available).length} Files
+      </span>
+
+      {/* If there are missing files, we display those in a separate badge. */}
+      {failed.length ? (
+        <span className='inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-red-100 text-red-800'>
+          <ExclamationTriangleIcon className='mr-2 w-5 h-5' />
+          {failed.length} Failed
+        </span>
+      ) : null}
+    </div>
+  );
+};
 
 /**
  * Indicate whether or not the file has been successfully uploaded.
@@ -121,6 +155,9 @@ export default connect('doModalClose', ({ doModalClose, product, date }) => {
               <i>{format(new UTCDate(currDate), 'EEEE, MMMM do, yyyy')}</i>
             )}
           </p>
+
+          {/* Add badges with the file counts. */}
+          {fileBadges(files)}
         </div>
       </div>
     );
