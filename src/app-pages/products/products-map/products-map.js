@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { connect } from 'redux-bundler-react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ProductsMapContainer from './products-map-container';
@@ -34,6 +34,7 @@ export default connect(function ProductsMap() {
   const [region, setRegion] = useState(null);
   const [geometry, setGeometry] = useState(null);
   const [results, setResults] = useState([]);
+  const mapContainer = useRef(null);
 
   const submitSearch = () => {
     fetch(MAP_SEARCH_URL, {
@@ -45,7 +46,8 @@ export default connect(function ProductsMap() {
     })
       .then((response) => response.json())
       .then(filterResults)
-      .then(setResults);
+      .then(setResults)
+      .then(() => mapContainer.current.disableEditing());
   };
 
   const filterResults = (data) => {
@@ -71,6 +73,7 @@ export default connect(function ProductsMap() {
   return (
     <div className='shadow bg-slate-100 h-full ml-5 mr-5 overflow-hidden border-b border-t border-gray-200 sm:rounded-lg'>
       <ProductsMapContainer
+        ref={mapContainer}
         onRegionUpdate={setRegion}
         onGeometryUpdate={setGeometry}
         locations={results}

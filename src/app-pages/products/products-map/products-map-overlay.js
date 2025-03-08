@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { useMap } from 'react-leaflet/hooks';
 import * as Leaflet from 'leaflet';
 import {
@@ -19,11 +19,23 @@ const uploadIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox=
   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
 </svg>`;
 
-export default function ProductsMapOverlay(props) {
+const ProductsMapOverlay = forwardRef(function (props, ref) {
   const draw = useRef(null);
   const layerGroup = useRef(null);
   const fileInput = useRef(null);
   const map = useMap();
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return { disableEditing };
+    },
+    []
+  );
+
+  const disableEditing = () => {
+    draw.current.setMode('render');
+  };
 
   useEffect(() => {
     const terraDraw = new TerraDraw({
@@ -117,11 +129,15 @@ export default function ProductsMapOverlay(props) {
   };
 
   return (
-    <input
-      type='file'
-      ref={fileInput}
-      onChange={onFileUpload}
-      style={{ display: 'none' }}
-    />
+    <div ref={ref}>
+      <input
+        type='file'
+        ref={fileInput}
+        onChange={onFileUpload}
+        style={{ display: 'none' }}
+      />
+    </div>
   );
-}
+});
+
+export default ProductsMapOverlay;
