@@ -83,7 +83,9 @@ export default function ProductsMapOverlay(props) {
 
     draw.current.clear();
     draw.current.setMode('rectangle');
+
     props.onRegionUpdate(null);
+    props.onGeometryUpdate(null);
   };
 
   const onFileUpload = async (e) => {
@@ -92,10 +94,10 @@ export default function ProductsMapOverlay(props) {
     const data = await file.arrayBuffer();
     const geojson = await shp(data);
 
-    const simplified = await turf.simplify(geojson, {
-      tolerance: 0.05,
-      highQuality: false,
-    });
+    const simplified = await turf.convex(geojson);
+
+    props.onRegionUpdate(simplified);
+    props.onGeometryUpdate(geojson);
 
     const group = new Leaflet.LayerGroup();
     group.addLayer(Leaflet.geoJSON(geojson));

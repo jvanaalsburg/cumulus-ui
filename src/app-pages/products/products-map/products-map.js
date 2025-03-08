@@ -31,6 +31,7 @@ function Debug({ data, label }) {
 
 export default connect(function ProductsMap() {
   const [region, setRegion] = useState(null);
+  const [geometry, setGeometry] = useState(null);
   const [results, setResults] = useState([]);
 
   const submitSearch = () => {
@@ -49,6 +50,7 @@ export default connect(function ProductsMap() {
     <div className='shadow bg-slate-100 h-full ml-5 mr-5 overflow-hidden border-b border-t border-gray-200 sm:rounded-lg'>
       <ProductsMapContainer
         onRegionUpdate={setRegion}
+        onGeometryUpdate={setGeometry}
         locations={results}
       />
 

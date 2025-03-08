@@ -10,7 +10,10 @@ export default function ProductsMapContainer(props) {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        <ProductsMapOverlay onRegionUpdate={props.onRegionUpdate} />
+        <ProductsMapOverlay
+          onRegionUpdate={props.onRegionUpdate}
+          onGeometryUpdate={props.onGeometryUpdate}
+        />
         {props.locations.map((loc, i) => (
           <Marker
             key={`loc-${i}`}
