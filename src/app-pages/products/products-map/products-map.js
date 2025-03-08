@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { connect } from 'redux-bundler-react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ProductsMapContainer from './products-map-container';
+import * as turf from '@turf/turf';
 
 const MAP_SEARCH_URL = process.env.REACT_APP_MAP_SEARCH_URL;
 
@@ -43,7 +44,28 @@ export default connect(function ProductsMap() {
       body: JSON.stringify(region),
     })
       .then((response) => response.json())
+      .then(filterResults)
       .then(setResults);
+  };
+
+  const filterResults = (data) => {
+    if (!geometry) {
+      return data;
+    }
+
+    return data.filter((loc) => {
+      const point = turf.point([loc.location.lon, loc.location.lat]);
+
+      let isWithin = false;
+
+      turf.featureEach(geometry, (feature) => {
+        if (turf.booleanWithin(point, feature)) {
+          isWithin = true;
+        }
+      });
+
+      return isWithin;
+    });
   };
 
   return (
