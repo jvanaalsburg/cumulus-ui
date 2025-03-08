@@ -20,6 +20,15 @@ function SearchButton({ onClick, isDisabled }) {
   );
 }
 
+function Debug({ data, label }) {
+  return (
+    <div>
+      <tt className='text-gray-500 font-bold'>{label}:</tt>
+      <pre className='text-xs'>{JSON.stringify(data, null, '\t')}</pre>
+    </div>
+  );
+}
+
 export default connect(function ProductsMap() {
   const [region, setRegion] = useState(null);
   const [results, setResults] = useState([]);
@@ -45,6 +54,11 @@ export default connect(function ProductsMap() {
 
       <div className='flex justify-end mt-2 mb-2 mr-2'>
         <SearchButton onClick={submitSearch} isDisabled={!region} />
+      </div>
+
+      <div className='grid grid-cols-2 gap-4 ml-5 mr-5 mb-5'>
+        <Debug data={region} label='region' />
+        <Debug data={results} label='results' />
       </div>
     </div>
   );
