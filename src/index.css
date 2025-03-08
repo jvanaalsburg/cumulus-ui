@@ -18,3 +18,9 @@
 .leaflet-marker-pane {
   z-index: 999 !important;
 }
+
+.easy-button-button .button-state {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
