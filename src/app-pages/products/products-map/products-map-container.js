@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import ProductsMapOverlay from './products-map-overlay';
 
 export default function ProductsMapContainer(props) {
@@ -11,6 +11,17 @@ export default function ProductsMapContainer(props) {
         />
 
         <ProductsMapOverlay onRegionUpdate={props.onRegionUpdate} />
+        {props.locations.map((loc, i) => (
+          <Marker
+            key={`loc-${i}`}
+            position={[loc.location.lat, loc.location.lon]}
+          >
+            <Popup>
+              <h2>{loc.name}</h2>
+              <p>{loc.description}</p>
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );

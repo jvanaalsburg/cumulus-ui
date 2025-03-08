@@ -14,3 +14,7 @@
   width: 100%;
   min-height: 400px;
 }
+
+.leaflet-marker-pane {
+  z-index: 999 !important;
+}

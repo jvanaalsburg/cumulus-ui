@@ -22,7 +22,7 @@ function SearchButton({ onClick, isDisabled }) {
 
 export default connect(function ProductsMap() {
   const [region, setRegion] = useState(null);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState([]);
 
   const submitSearch = () => {
     fetch(MAP_SEARCH_URL, {
@@ -38,7 +38,10 @@ export default connect(function ProductsMap() {
 
   return (
     <div className='shadow bg-slate-100 h-full ml-5 mr-5 overflow-hidden border-b border-t border-gray-200 sm:rounded-lg'>
-      <ProductsMapContainer onRegionUpdate={setRegion} />
+      <ProductsMapContainer
+        onRegionUpdate={setRegion}
+        locations={results}
+      />
 
       <div className='flex justify-end mt-2 mb-2 mr-2'>
         <SearchButton onClick={submitSearch} isDisabled={!region} />
