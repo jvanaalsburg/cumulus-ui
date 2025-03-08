@@ -19,8 +19,13 @@ const uploadIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox=
   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
 </svg>`;
 
+const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-2" style="scale:0.7">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+</svg>`;
+
 const ProductsMapOverlay = forwardRef(function (props, ref) {
   const draw = useRef(null);
+  const featureId = useRef(null);
   const layerGroup = useRef(null);
   const fileInput = useRef(null);
   const map = useMap();
@@ -69,6 +74,7 @@ const ProductsMapOverlay = forwardRef(function (props, ref) {
     terraDraw.on('change', onChange);
     terraDraw.on('finish', onCreate);
 
+    Leaflet.easyButton(editIcon, onEdit).addTo(map);
     Leaflet.easyButton(trashIcon, onDelete).addTo(map);
     Leaflet.easyButton(uploadIcon, async () =>
       fileInput.current?.click(),
@@ -84,7 +90,12 @@ const ProductsMapOverlay = forwardRef(function (props, ref) {
 
   const onCreate = (id, context) => {
     draw.current.selectFeature(id);
+    featureId.current = id;
     onChange();
+  };
+
+  const onEdit = () => {
+    draw.current.selectFeature(featureId.current);
   };
 
   const onDelete = () => {
