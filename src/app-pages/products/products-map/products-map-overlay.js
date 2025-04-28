@@ -95,7 +95,9 @@ const ProductsMapOverlay = forwardRef(function (props, ref) {
   };
 
   const onEdit = () => {
-    draw.current.selectFeature(featureId.current);
+    if (featureId.current) {
+      draw.current.selectFeature(featureId.current);
+    }
   };
 
   const onDelete = () => {
@@ -106,6 +108,8 @@ const ProductsMapOverlay = forwardRef(function (props, ref) {
 
     draw.current.clear();
     draw.current.setMode('rectangle');
+
+    featureId.current = null;
 
     props.onRegionUpdate(null);
     props.onGeometryUpdate(null);
